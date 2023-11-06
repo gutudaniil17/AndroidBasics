@@ -2,38 +2,20 @@ package com.example.myapplication
 
 import android.os.Bundle
 import android.widget.Button
-import android.widget.CheckBox
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.checkbox_radiobutton)
+        setContentView(R.layout.toast)
 
-        val btnOrder = findViewById<Button>(R.id.btnOrder)
+        val btnShowToast = findViewById<Button>(R.id.btnShowToast)
 
-        btnOrder.setOnClickListener{
-            val rgMeat = findViewById<RadioGroup>(R.id.rgMeat)
-            val checkedMeat = findViewById<RadioButton>(rgMeat.checkedRadioButtonId)
-            val cheese = findViewById<CheckBox>(R.id.cbCheese).isChecked
-            val onion = findViewById<CheckBox>(R.id.cbOnions).isChecked
-            val salad = findViewById<CheckBox>(R.id.cbSalad).isChecked
-
-            val orderString = "You ordered a burger with:\n" +
-                    "${checkedMeat.text}"+
-                    (if(cheese) "\nCheese" else "")+
-                    (if(salad) "\nSalad" else "")+
-                    (if(onion) "\nOnions" else "")
-
-            val tvOrder = findViewById<TextView>(R.id.tvOrder)
-            tvOrder.text = orderString
-
+        btnShowToast.setOnClickListener{
+            Toast.makeText( applicationContext, "Hi, I'm the toast!", Toast.LENGTH_LONG).show()
         }
-
     }
 
 }
