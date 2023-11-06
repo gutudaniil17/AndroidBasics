@@ -1,9 +1,10 @@
 package com.example.myapplication
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
-import android.widget.EditText
+import android.widget.CheckBox
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
@@ -11,29 +12,28 @@ import androidx.appcompat.app.AppCompatActivity
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.checkbox_radiobutton)
 
-        val btnApply = findViewById<Button>(R.id.btnApply)
+        val btnOrder = findViewById<Button>(R.id.btnOrder)
 
-        btnApply.setOnClickListener {
-            val firstName = findViewById<EditText>(R.id.etFirstName).text.toString()
-            val lastName = findViewById<EditText>(R.id.etLastName).text.toString()
-            val birthday = findViewById<EditText>(R.id.etBirthday).text.toString()
-            val country = findViewById<EditText>(R.id.etCountry).text.toString()
-            Log.d(
-                "Main activity",
-                "$firstName $lastName, born on $birthday, from $country just applied formula."
-            )
+        btnOrder.setOnClickListener{
+            val rgMeat = findViewById<RadioGroup>(R.id.rgMeat)
+            val checkedMeat = findViewById<RadioButton>(rgMeat.checkedRadioButtonId)
+            val cheese = findViewById<CheckBox>(R.id.cbCheese).isChecked
+            val onion = findViewById<CheckBox>(R.id.cbOnions).isChecked
+            val salad = findViewById<CheckBox>(R.id.cbSalad).isChecked
+
+            val orderString = "You ordered a burger with:\n" +
+                    "${checkedMeat.text}"+
+                    (if(cheese) "\nCheese" else "")+
+                    (if(salad) "\nSalad" else "")+
+                    (if(onion) "\nOnions" else "")
+
+            val tvOrder = findViewById<TextView>(R.id.tvOrder)
+            tvOrder.text = orderString
+
         }
 
-        val btnCount = findViewById<Button>(R.id.btnCount)
-        val tvCount = findViewById<TextView>(R.id.tvCount)
-
-        var count = 0
-        btnCount.setOnClickListener {
-            count++
-            tvCount.text = "Let's count together: $count"
-        }
     }
 
 }
