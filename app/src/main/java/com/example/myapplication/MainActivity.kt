@@ -1,31 +1,37 @@
 package com.example.myapplication
 
 import android.os.Bundle
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.Button
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val customList = listOf("First", "Second", "Third", "Fourth")
-        val adapter = ArrayAdapter<String>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, customList)
-        val spMonths = findViewById<Spinner>(R.id.spMonths)
-        spMonths.adapter = adapter
+        var todoList = mutableListOf(
+            Todo("Volleyball", false),
+            Todo("Volleyball", false),
+            Todo("Volleyball", false),
+            Todo("Volleyball", false),
+            Todo("Volleyball", false),
+            Todo("Volleyball", false)
+        )
 
-        spMonths.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                Toast.makeText(this@MainActivity,
-                    "You selected ${adapterView?.getItemAtPosition(position).toString()}", Toast.LENGTH_SHORT).show()            }
+        val adapter = TodoAdapter(todoList)
+        val rvTodos = findViewById<RecyclerView>(R.id.rvTodos)
+        rvTodos.adapter = adapter
+        rvTodos.layoutManager = LinearLayoutManager(this)
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
+        val btnAddTodo = findViewById<Button>(R.id.btnAddTodo)
+        btnAddTodo.setOnClickListener {
+            val title = findViewById<EditText>(R.id.etTodo).text.toString()
+            val todo = Todo(title, false)
+            todoList.add(todo)
+            adapter.notifyItemInserted(todoList.size-1)
         }
     }
 }
