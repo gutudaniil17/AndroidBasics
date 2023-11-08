@@ -1,9 +1,11 @@
 package com.example.myapplication
 
 import android.os.Bundle
-import android.widget.Button
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -11,61 +13,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val btnDialog1 = findViewById<Button>(R.id.btnDialog1)
-        val btnDialog2 = findViewById<Button>(R.id.btnDialog2)
-        val btnDialog3 = findViewById<Button>(R.id.btnDialog3)
+        val customList = listOf("First", "Second", "Third", "Fourth")
+        val adapter = ArrayAdapter<String>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, customList)
+        val spMonths = findViewById<Spinner>(R.id.spMonths)
+        spMonths.adapter = adapter
 
-        val addContactDialog = AlertDialog.Builder(this)
-            .setTitle("Add contact")
-            .setMessage("Do you want to add Mr. Poop to your contact list?")
-            .setIcon(R.drawable.ic_add_contact)
-            .setPositiveButton("Yes"){ _, _ ->
-                Toast.makeText(this, "You added Mr. Poop to your contact list", Toast.LENGTH_SHORT).show()
-            }
-            .setNegativeButton("No"){ _, _ ->
-                Toast.makeText(this, "You didn't add Mr. Poop to your contact list", Toast.LENGTH_SHORT).show()
-            }
-            .create()
+        spMonths.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                Toast.makeText(this@MainActivity,
+                    "You selected ${adapterView?.getItemAtPosition(position).toString()}", Toast.LENGTH_SHORT).show()            }
 
-        btnDialog1.setOnClickListener {
-            addContactDialog.show()
-        }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
 
-        val options = arrayOf("First Item", "Second Item", "Third Item")
-
-        val singleChoiceDialog = AlertDialog.Builder(this)
-            .setTitle("Choose on of these options")
-            .setSingleChoiceItems(options, 0){dialogInterface, i ->
-                Toast.makeText(this, "You clicked on ${options[i]}", Toast.LENGTH_SHORT).show()
             }
-            .setPositiveButton("Accept"){ _, _ ->
-                Toast.makeText(this, "You accepted the single choice of the dialog", Toast.LENGTH_SHORT).show()
-            }
-            .setNegativeButton("Decline"){ _, _ ->
-                Toast.makeText(this, "You didn't accept the single choice of the dialog", Toast.LENGTH_SHORT).show()
-            }
-            .create()
-
-        btnDialog2.setOnClickListener {
-            singleChoiceDialog.show()
-        }
-
-        val multiChoiceDialog = AlertDialog.Builder(this)
-            .setTitle("Choose on of these options")
-            .setMultiChoiceItems(options, booleanArrayOf(false, false, false)) { _, i , isChecked->
-                if(isChecked)
-                Toast.makeText(this, "You clicked on ${options[i]}", Toast.LENGTH_SHORT).show()
-            }
-            .setPositiveButton("Accept"){ _, _ ->
-                Toast.makeText(this, "You accepted the multi choice of the dialog", Toast.LENGTH_SHORT).show()
-            }
-            .setNegativeButton("Decline"){ _, _ ->
-                Toast.makeText(this, "You didn't accept the multi choice of the dialog", Toast.LENGTH_SHORT).show()
-            }
-            .create()
-
-        btnDialog3.setOnClickListener {
-            multiChoiceDialog.show()
         }
     }
 }
