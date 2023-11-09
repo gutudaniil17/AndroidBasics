@@ -1,49 +1,42 @@
 package com.example.myapplication
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
+
+    lateinit var toggle: ActionBarDrawerToggle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val images = listOf(
-            R.drawable.ic_add_contact,
-            R.drawable.ic_favorites,
-            R.drawable.ic_home,
-            R.drawable.ic_messages
-        )
+        val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
+        toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close)
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
 
-        val adapter = ViewPagerAdapter(images)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val viewPager = findViewById<ViewPager2>(R.id.viewPager)
-        viewPager.adapter = adapter
-
-        val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
-        TabLayoutMediator(tabLayout, viewPager){ tab, position ->
-            tab.text = "Tab ${position + 1}"
-        }.attach()
-
-        tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                Toast.makeText(this@MainActivity, "Selected ${tab?.text}", Toast.LENGTH_SHORT).show()
+        val navView = findViewById<NavigationView>(R.id.navView)
+        navView.setNavigationItemSelectedListener {
+            when (it.itemId){
+                R.id.miItem1 -> Toast.makeText(this, "Clicked Item 1", Toast.LENGTH_SHORT).show()
+                R.id.miItem2 -> Toast.makeText(this, "Clicked Item 2", Toast.LENGTH_SHORT).show()
+                R.id.miItem2 -> Toast.makeText(this, "Clicked Item 3", Toast.LENGTH_SHORT).show()
             }
+            true
+        }
+    }
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-                Toast.makeText(this@MainActivity, "Unselected ${tab?.text}", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-                Toast.makeText(this@MainActivity, "Reselected ${tab?.text}", Toast.LENGTH_SHORT).show()
-            }
-        })
-
-        //for vertical swipe
-//        viewPager.orientation = ViewPager2.ORIENTATION_VERTICAL
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(toggle.onOptionsItemSelected(item)){
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
